@@ -27,7 +27,7 @@ public class Doctor {
 
     @NotNull
     @Size(min = 3, max = 50)
-    private String speciality;
+    private String specialty;
 
     @NotNull
     @Email
@@ -93,8 +93,8 @@ public class Doctor {
         return phone;
     }
 
-    public String getSpeciality() {
-        return speciality;
+    public String getSpecialty() {
+        return specialty;
     }
 
 }
