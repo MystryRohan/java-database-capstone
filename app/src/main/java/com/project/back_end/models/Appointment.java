@@ -18,7 +18,7 @@ public class Appointment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private long appointmentId;
 
   @ManyToOne
   @NotNull(message = "doctor cannot be empty")
@@ -46,8 +46,8 @@ public class Appointment {
     this.doctor = doctor;
   }
 
-  public void setId(long id) {
-    this.id = id;
+  public void setAppointmentId(long id) {
+    this.appointmentId = id;
   }
 
   public void setPatient(long patient) {
@@ -66,8 +66,8 @@ public class Appointment {
     return doctor;
   }
 
-  public long getId() {
-    return id;
+  public long getAppointmentId() {
+    return appointmentId;
   }
 
   public long getPatient() {
