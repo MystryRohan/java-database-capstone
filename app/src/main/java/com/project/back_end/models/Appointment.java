@@ -22,11 +22,11 @@ public class Appointment {
 
   @ManyToOne
   @NotNull(message = "doctor cannot be empty")
-  private long doctor;
+  private Doctor doctor;
 
   @ManyToOne
   @NotNull(message = "patient cannot be empty")
-  private long patient;
+  private Patient patient;
 
   @Future(message = "appointment time must be in the future")
   @NotNull(message = "appointment time cannot be empty")
@@ -42,7 +42,7 @@ public class Appointment {
     this.appointmentTime = appointmentTime;
   }
 
-  public void setdoctor(long doctor) {
+  public void setdoctor(Doctor doctor) {
     this.doctor = doctor;
   }
 
@@ -50,7 +50,7 @@ public class Appointment {
     this.appointmentId = id;
   }
 
-  public void setPatient(long patient) {
+  public void setPatient(Patient patient) {
     this.patient = patient;
   }
 
@@ -62,7 +62,7 @@ public class Appointment {
     return appointmentTime;
   }
 
-  public long getDoctor() {
+  public Doctor getDoctor() {
     return doctor;
   }
 
@@ -70,7 +70,7 @@ public class Appointment {
     return appointmentId;
   }
 
-  public long getPatient() {
+  public Patient getPatient() {
     return patient;
   }
 

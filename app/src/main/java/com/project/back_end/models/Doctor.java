@@ -69,6 +69,10 @@ public class Doctor {
         this.phone = phone;
     }
 
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
     public List<String> getAvailableTimes() {
         return availableTimes;
     }

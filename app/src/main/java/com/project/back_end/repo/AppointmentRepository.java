@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import com.project.back_end.models.Appointment;
-import com.project.back_end.models.Doctor;
 
 import jakarta.transaction.Transactional;
 
@@ -23,7 +22,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 	// - Parameters: Long doctorId, LocalDateTime start, LocalDateTime end
 	// - It uses a LEFT JOIN to fetch the doctor’s available times along with the
 	// appointments.
-	public List<Doctor> findByDoctorIdAndAppointmentTimeBetween(long doctorName, LocalDateTime start,
+	public List<Appointment> findByDoctorIdAndAppointmentTimeBetween(long doctorName, LocalDateTime start,
 			LocalDateTime end);
 
 	// -
