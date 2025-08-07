@@ -18,7 +18,7 @@ public class Prescription {
 	private String patientName;
 
 	@NonNull
-	private long appointmentId;
+	private Long appointmentId;
 
 	@NonNull
 	@Size(min = 3, max = 100)
@@ -33,7 +33,7 @@ public class Prescription {
 	public Prescription() {
 	}
 
-	public Prescription(String patientName, String medication, String dosage, String doctorNotes, long appointmentId) {
+	public Prescription(String patientName, String medication, String dosage, String doctorNotes, Long appointmentId) {
 		this.appointmentId = appointmentId;
 		this.doctorNotes = doctorNotes;
 		this.dosage = dosage;
@@ -41,7 +41,7 @@ public class Prescription {
 		this.patientName = patientName;
 	}
 
-	public void setAppointmentId(long appointmentId) {
+	public void setAppointmentId(Long appointmentId) {
 		this.appointmentId = appointmentId;
 	}
 
@@ -65,7 +65,7 @@ public class Prescription {
 		this.patientName = patientName;
 	}
 
-	public long getAppointmentId() {
+	public Long getAppointmentId() {
 		return appointmentId;
 	}
 

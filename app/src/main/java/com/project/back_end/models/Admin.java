@@ -13,7 +13,7 @@ public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull(message = "username cannot be null")
     private String username;
@@ -25,7 +25,7 @@ public class Admin {
     public Admin() {
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,7 +37,7 @@ public class Admin {
         this.password = password;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

@@ -19,7 +19,7 @@ public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @Size(min = 3, max = 100)
@@ -53,7 +53,7 @@ public class Doctor {
         this.email = email;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -81,7 +81,7 @@ public class Doctor {
         return email;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
