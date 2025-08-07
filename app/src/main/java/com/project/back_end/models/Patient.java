@@ -16,7 +16,7 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long patientId;
+    private long id;
 
     @NotNull
     @Size(min = 3, max = 100)
@@ -47,8 +47,8 @@ public class Patient {
         this.email = email;
     }
 
-    public void setPatientId(long id) {
-        this.patientId = id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -71,8 +71,8 @@ public class Patient {
         return email;
     }
 
-    public long getPatientId() {
-        return patientId;
+    public long getId() {
+        return id;
     }
 
     public String getName() {

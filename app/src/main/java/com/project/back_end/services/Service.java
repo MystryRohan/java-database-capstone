@@ -152,14 +152,14 @@ public class Service {
     // - If the doctor doesn’t exist, it returns -1.
     // This logic prevents overlapping or invalid appointment bookings.
     public int validateAppointment(Appointment appointment) {
-        Optional<Doctor> doctor = doctorRepository.findById(appointment.getDoctor().getDoctorId());
+        Optional<Doctor> doctor = doctorRepository.findById(appointment.getDoctor().getId());
         if (doctor.isEmpty()) {
             return -1;
         }
         LocalDate date = appointment.getAppointmentDate();
         LocalTime time = appointment.getAppointmentTimeOnly();
 
-        List<String> availableTime = doctorService.getDoctorAvailability(appointment.getDoctor().getDoctorId(), date);
+        List<String> availableTime = doctorService.getDoctorAvailability(appointment.getDoctor().getId(), date);
 
         for (String availTime : availableTime) {
             LocalTime startTime = LocalTime.parse(availTime.split("-")[0]);
@@ -230,15 +230,15 @@ public class Service {
 
         if (!condition.equals(null) && !condition.equals(null)) {
             return new ResponseEntity<>(
-                    patientService.filterByDoctorAndCondition(patient.getPatientId(), doctorName, condition),
+                    patientService.filterByDoctorAndCondition(patient.getId(), doctorName, condition),
                     HttpStatus.OK);
         } else if (!condition.equals(null) && doctorName.equals(null)) {
-            return patientService.filterByCondition(condition, patient.getPatientId());
+            return patientService.filterByCondition(condition, patient.getId());
         } else if (!doctorName.equals(null) && condition.equals(null)) {
-            return new ResponseEntity<>(patientService.filterByDoctor(patient.getPatientId(), doctorName),
+            return new ResponseEntity<>(patientService.filterByDoctor(patient.getId(), doctorName),
                     HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(patientService.getPatientAppointment(patient.getPatientId()), HttpStatus.OK);
+            return new ResponseEntity<>(patientService.getPatientAppointment(patient.getId()), HttpStatus.OK);
         }
     }
 

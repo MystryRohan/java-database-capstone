@@ -85,10 +85,10 @@ public class PatientService {
 
     public AppointmentDTO toAppointmentDTO(Appointment appointment) {
         return new AppointmentDTO(
-                appointment.getAppointmentId(),
-                appointment.getDoctor().getDoctorId(),
+                appointment.getId(),
+                appointment.getDoctor().getId(),
                 appointment.getDoctor().getName(),
-                appointment.getPatient().getPatientId(),
+                appointment.getPatient().getId(),
                 appointment.getPatient().getName(),
                 appointment.getPatient().getEmail(),
                 appointment.getPatient().getPhone(),

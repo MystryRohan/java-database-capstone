@@ -86,11 +86,11 @@ public class AppointmentService {
     // appointment updates.
     @Transactional
     public ResponseEntity<String> updateAppointment(Appointment appointment) {
-        Optional<Appointment> result = appointmentRepository.findById(appointment.getAppointmentId());
+        Optional<Appointment> result = appointmentRepository.findById(appointment.getId());
         if (result.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if (result.get().getPatient().getPatientId() != appointment.getPatient().getPatientId()) {
+        if (result.get().getPatient().getId() != appointment.getPatient().getId()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         int slotAvailable = service.validateAppointment(appointment);
@@ -115,7 +115,7 @@ public class AppointmentService {
         Optional<Appointment> appointment = appointmentRepository.findById(appointmentId);
 
         try {
-            if (appointment.isPresent() && appointment.get().getPatient().getPatientId() == result.getPatientId()) {
+            if (appointment.isPresent() && appointment.get().getPatient().getId() == result.getId()) {
                 appointmentRepository.delete(appointment.get());
                 return new ResponseEntity<>("Appointment Cancelled", HttpStatus.OK);
             } else {
@@ -147,9 +147,9 @@ public class AppointmentService {
             if (!patientName.equals(null)) {
                 appointments = appointmentRepository
                         .findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(
-                                doctor.getDoctorId(), patientName, dayStart, dayEnd);
+                                doctor.getId(), patientName, dayStart, dayEnd);
             } else {
-                appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctor.getDoctorId(),
+                appointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctor.getId(),
                         dayStart, dayEnd);
             }
             List<AppointmentDTO> result = appointments.stream().map(appts -> patientService.toAppointmentDTO(appts))

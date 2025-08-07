@@ -161,8 +161,8 @@ public class DoctorService {
             return -1;
         }
         try {
-            appointmentRepository.deleteAllByDoctorId(result.get().getDoctorId());
-            doctorRepository.deleteById(result.get().getDoctorId());
+            appointmentRepository.deleteAllByDoctorId(result.get().getId());
+            doctorRepository.deleteById(result.get().getId());
             return 1;
         } catch (Exception e) {
             return 0;
