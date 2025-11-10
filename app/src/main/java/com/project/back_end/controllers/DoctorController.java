@@ -56,13 +56,16 @@ public class DoctorController {
     // - If the token is invalid, returns an error response; otherwise, returns the
     // availability status for the doctor.
     @GetMapping("/availability/{user}/{doctorId}/{date}/{token}")
-    public ResponseEntity<?> getDoctorAvailability(@PathVariable String user, Long doctorId, LocalDate date,
+    public ResponseEntity<Map<String,Object>> getDoctorAvailability(@PathVariable String user, Long doctorId, LocalDate date,
             String token) {
-        ResponseEntity<String> result = service.validateToken(token, user);
-        if (result.getBody().equals("Welcome")) {
-            return new ResponseEntity<>(doctorService.getDoctorAvailability(doctorId, date), HttpStatus.OK);
+        ResponseEntity<Map<String,String>> result = service.validateToken(token, user);
+        Map<String,Object> map = new HashMap<>();
+        if (result.getBody().isEmpty()) {
+            map.put("message", doctorService.getDoctorAvailability(doctorId, date));
+            return new ResponseEntity<>(map, HttpStatus.OK);
         }
-        return result;
+        map.putAll(result.getBody());
+        return ResponseEntity.status(result.getStatusCode()).body(map);
     }
 
     // 4. Define the `getDoctor` Method:
@@ -70,8 +73,8 @@ public class DoctorController {
     // - Returns the list within a response map under the key `"doctors"` with HTTP
     // 200 OK status.
     @GetMapping()
-    public ResponseEntity<Map<String, List<Doctor>>> getDoctor() {
-        Map<String, List<Doctor>> map = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> getDoctor() {
+        Map<String, Object> map = new HashMap<>();
         map.put("doctor", doctorService.getDoctors());
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
@@ -85,16 +88,22 @@ public class DoctorController {
     // the doctor and returns a success message.
 
     @PostMapping("/{token}")
-    public ResponseEntity<?> saveDoctor(@RequestBody Doctor doctor, @PathVariable String token) {
-        ResponseEntity<String> result = service.validateToken(token, "admin");
-        if (result.getBody().equals("Welcome")) {
+    public ResponseEntity<Map<String,String>> saveDoctor(@RequestBody Doctor doctor, @PathVariable String token) {
+        ResponseEntity<Map<String,String>> result = service.validateToken(token, "admin");
+
+        Map<String,String> map = new HashMap<>();
+
+        if (result.getBody().isEmpty()) {
             int res = doctorService.saveDoctor(doctor);
             if (res == -1) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+                map.put("message","doctor already exist");
+                return new ResponseEntity<>(map,HttpStatus.CONFLICT);
             } else if (res == 0) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                map.put("message","Internal Server error");
+                return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                return new ResponseEntity<>("Saved Successfully", HttpStatus.OK);
+                map.put("message","doctor saved to db");
+                return new ResponseEntity<>(map, HttpStatus.OK);
             }
 
         }
@@ -108,7 +117,7 @@ public class DoctorController {
     // and token information.
 
     @PostMapping("/login")
-    public ResponseEntity<?> doctorLogin(@RequestBody Login login) {
+    public ResponseEntity<Map<String,String>> doctorLogin(@RequestBody Login login) {
         return doctorService.validateDoctor(login);
     }
 
@@ -120,16 +129,20 @@ public class DoctorController {
     // returns not found or error messages.
 
     @PutMapping("/{token}")
-    public ResponseEntity<?> putMethodName(@PathVariable String token, @RequestBody @Valid Doctor doctor) {
-        ResponseEntity<String> result = service.validateToken(token, "admin");
-        if (result.getBody().equals("Welcome")) {
+    public ResponseEntity<Map<String,String>> updateDoctor(@PathVariable String token, @RequestBody @Valid Doctor doctor) {
+        ResponseEntity<Map<String,String>> result = service.validateToken(token, "admin");
+        Map<String,String> map = new HashMap<>();
+        if (result.getBody().isEmpty()) {
             int res = doctorService.updateDoctor(doctor);
             if (res == -1) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                map.put("message","doctor not found");
+                return new ResponseEntity<>(map,HttpStatus.NOT_FOUND);
             } else if (res == 0) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                map.put("message","internal server error");
+                return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                return new ResponseEntity<>("Updated", HttpStatus.OK);
+                map.put("message","Doctor Updated");
+                return new ResponseEntity<>(map, HttpStatus.OK);
             }
         }
         return result;
@@ -141,16 +154,21 @@ public class DoctorController {
     // - If the doctor exists, deletes the record and returns a success message;
     // otherwise, responds with a not found or error message.
     @DeleteMapping("/{doctorId}/{token}")
-    public ResponseEntity<?> deleteDoctor(@PathVariable Long doctorId, String token) {
-        ResponseEntity<String> result = service.validateToken(token, "admin");
-        if (result.getBody().equals("Welcome")) {
+    public ResponseEntity<Map<String,String>> deleteDoctor(@PathVariable Long doctorId, @PathVariable String token) {
+        ResponseEntity<Map<String,String>> result = service.validateToken(token, "admin");
+        Map<String,String> map = new HashMap<>();
+
+        if (result.getBody().isEmpty()) {
             int res = doctorService.deleteDoctor(doctorId);
             if (res == -1) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                map.put("message","doctor not found");
+                return new ResponseEntity<>(map,HttpStatus.NOT_FOUND);
             } else if (res == 0) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                map.put("message","internal server error");
+                return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
             } else {
-                return new ResponseEntity<>(HttpStatus.OK);
+                map.put("message","doctor deleted");
+                return new ResponseEntity<>(map,HttpStatus.OK);
             }
         }
         return result;
@@ -163,9 +181,8 @@ public class DoctorController {
     // - Calls the shared `Service` to perform filtering logic and returns matching
     // doctors in the response.
     @GetMapping("/filter/{name}/{time}/{speciality}")
-    public ResponseEntity<?> filter(@RequestParam String name, String time, String speciality) {
-        Map<String, List<Doctor>> map = new HashMap<>();
-        map.put("doctors", doctorService.filterDoctorsByNameSpecilityandTime(name, speciality, time));
+    public ResponseEntity<Map<String,Object>> filter(@PathVariable String name,@PathVariable String time,@PathVariable String speciality) {
+        Map<String, Object> map = doctorService.filterDoctorsByNameSpecilityandTime(name, speciality, time);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 

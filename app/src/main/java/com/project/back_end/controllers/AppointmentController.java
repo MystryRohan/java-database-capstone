@@ -67,7 +67,6 @@ public class AppointmentController {
 
         if (!result.getBody().isEmpty()) {
             map.putAll(result.getBody());
-            ;
             return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
             map = appointmentService.getAppointment(patient, date, token);

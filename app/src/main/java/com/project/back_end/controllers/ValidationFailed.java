@@ -31,10 +31,10 @@ public class ValidationFailed {
     // - Returns a `ResponseEntity` with HTTP 400 Bad Request status and the error
     // message in the body.
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException exception) {
-        Map<String, Object> map = new HashMap<>();
-        for (FieldError e : exception.getFieldErrors()) {
-            map.put("message", e.getDefaultMessage());
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, String> map = new HashMap<>();
+        for (FieldError e : exception.getBindingResult().getFieldErrors()) {
+            map.put("message ", e.getDefaultMessage());
         }
         return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }

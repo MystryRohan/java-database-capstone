@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("${api.path}prescription")
 public class PrescriptionController {
@@ -52,13 +55,13 @@ public class PrescriptionController {
     // - Delegates the saving logic to `PrescriptionService` and returns a response
     // indicating success or failure.
     @PostMapping("/{token}")
-    public ResponseEntity<?> savePrescription(@RequestBody Prescription prescription, @PathVariable String token) {
-        ResponseEntity<String> res = service.validateToken(token, "doctor");
-        if (res.getBody().equals("Welcome")) {
-            appointmentService.updateStatus(prescription.getAppointmentId());
+    public ResponseEntity<Map<String,String>> savePrescription(@RequestBody Prescription prescription, @PathVariable String token) {
+        ResponseEntity<Map<String,String>> res = service.validateToken(token, "doctor");
+        if (res.getBody().isEmpty()) {
+            appointmentService.changeStatus(prescription.getAppointmentId());
             return prescriptionService.savePrescription(prescription);
         }
-        return new ResponseEntity<>(res.getBody(), res.getStatusCode());
+        return res;
     }
 
     // 4. Define the `getPrescription` Method:
@@ -71,12 +74,15 @@ public class PrescriptionController {
     // - Returns the prescription details or an appropriate error message if
     // validation fails.
     @GetMapping("/{appointmentId}/{token}")
-    public ResponseEntity<?> getPrescription(@PathVariable Long appointmentId, String token) {
-        ResponseEntity<String> res = service.validateToken(token, "doctor");
-        if (res.getBody().equals("Welcome")) {
-            return prescriptionService.getPrescription(appointmentId);
+    public ResponseEntity<Map<String,Object>> getPrescription(@PathVariable Long appointmentId, String token) {
+        ResponseEntity<Map<String,String>> res = service.validateToken(token, "doctor");
+        Map<String,Object> map = new HashMap<>();
+
+        if (res.getBody().isEmpty()) {
+            prescriptionService.getPrescription(appointmentId);
         }
-        return new ResponseEntity<>(res.getBody(), res.getStatusCode());
+        map.putAll(res.getBody());
+        return new ResponseEntity<>(map, res.getStatusCode());
     }
 
 }
