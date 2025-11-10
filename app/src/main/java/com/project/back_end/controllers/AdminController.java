@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.back_end.DTO.Login;
+import com.project.back_end.models.Admin;
 import com.project.back_end.services.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +32,12 @@ public class AdminController {
     // checking.
     // - This promotes cleaner code and separation of concerns between the
     // controller and business logic layer.
-    @Autowired
-    private Service service;
+
+    private final Service service;
+
+    public AdminController(Service service) {
+        this.service = service;
+    }
     // 3. Define the `adminLogin` Method:
     // - Handles HTTP POST requests for admin login functionality.
     // - Accepts an `Admin` object in the request body, which contains login
@@ -43,7 +48,7 @@ public class AdminController {
     // messages.
 
     @PostMapping()
-    public ResponseEntity<Map<String, Object>> adminLogin(@RequestBody Login login) {
+    public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Admin login) {
         return service.validateAdmin(login);
     }
 

@@ -59,13 +59,18 @@ public class AppointmentController {
     // - If the token is invalid or expired, responds with the appropriate message
     // and status code.
     @GetMapping("/{date}/{patient}/{token}")
-    public ResponseEntity<?> getAppointments(@PathVariable LocalDate date, String patient, String token) {
-        ResponseEntity<String> result = service.validateToken(token, "doctor");
-        Map<String, List<AppointmentDTO>> map = new HashMap<>();
-        if (result.getBody().equals("Welcome")) {
-            map.put("appointments", appointmentService.getAppointments(token, date, patient).getBody());
+    public ResponseEntity<Map<String, Object>> getAppointments(@PathVariable LocalDate date, String patient,
+            String token) {
+        ResponseEntity<Map<String, String>> result = service.validateToken(token, "doctor");
+
+        Map<String, Object> map = new HashMap<>();
+
+        if (!result.getBody().isEmpty()) {
+            map.putAll(result.getBody());
+            ;
             return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
+            map = appointmentService.getAppointment(patient, date, token);
             return new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
         }
     }
@@ -80,22 +85,33 @@ public class AppointmentController {
     // - Returns success if booked, or appropriate error messages if the doctor ID
     // is invalid or the slot is already taken.
     @PostMapping("/{token}")
-    public ResponseEntity<?> bookAppointment(@RequestBody Appointment appointment, @PathVariable String token) {
-        String result = service.validateToken(token, "user").getBody();
-        Map<String, Object> map = new HashMap<>();
-        if (result.equals("Welcome")) {
-            appointmentService.getAppointments(token, appointment.getAppointmentDate(), result);
+    public ResponseEntity<Map<String, String>> bookAppointment(@Valid @RequestBody Appointment appointment,
+            @PathVariable String token) {
+        Map<String, String> result = service.validateToken(token, "patient").getBody();
+
+        if (!result.isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+        }
+
+        Map<String, String> map = new HashMap<>();
+        int out = service.validateAppointment(appointment);
+        if (out == 1) {
             int res = appointmentService.bookAppointment(appointment);
             if (res == 1) {
-                map.put("message", "booked");
-                return new ResponseEntity<>(map, HttpStatus.OK);
-            } else {
-                map.put("message", "Failed");
-                return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+                map.put("message", "Appointment Booked Successfully");
+                return ResponseEntity.status(HttpStatus.CREATED).body(map);
             }
+            map.put("message", "Internal Server Error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
+
+        } else if (out == -1) {
+            map.put("message", "Invalid doctor id");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
         }
-        map.put("message", "Invalid Credentials");
-        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+
+        map.put("message", "Appointment already booked for given time or Doctor not available");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
+
     }
     // 5. Define the `updateAppointment` Method:
     // - Handles HTTP PUT requests to modify an existing appointment.
@@ -106,13 +122,14 @@ public class AppointmentController {
     // result.
 
     @PutMapping("/{token}")
-    public ResponseEntity<String> updateAppointment(@PathVariable String token,
+    public ResponseEntity<Map<String, String>> updateAppointment(@PathVariable String token,
             @RequestBody @Valid Appointment appointment) {
-        ResponseEntity<String> result = service.validateToken(token, "user");
-        if (result.getBody().equals("Welcome")) {
-            return appointmentService.updateAppointment(appointment);
+        ResponseEntity<Map<String, String>> result = service.validateToken(token, "patient");
+        if (!result.getBody().isEmpty()) {
+            return result;
         }
-        return result;
+
+        return appointmentService.updateAppointment(appointment);
     }
 
     // 6. Define the `cancelAppointment` Method:
@@ -122,10 +139,10 @@ public class AppointmentController {
     // to cancel the appointment.
     // - Calls `AppointmentService` to handle the cancellation process and returns
     // the result.
-    @DeleteMapping("/id/{token}")
+    @DeleteMapping("/{id}/{token}")
     public ResponseEntity<?> cancelAppointment(@PathVariable String token, Long id) {
-        ResponseEntity<String> result = service.validateToken(token, "user");
-        if (result.getBody().equals("Welcome")) {
+        ResponseEntity<Map<String, String>> result = service.validateToken(token, "patient");
+        if (result.getBody().isEmpty()) {
             return appointmentService.cancelAppointment(id, token);
         }
         return result;
