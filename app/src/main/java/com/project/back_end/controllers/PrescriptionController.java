@@ -37,12 +37,15 @@ public class PrescriptionController {
     // access control.
     // - Inject `AppointmentService` to update appointment status after a
     // prescription is issued.
-    @Autowired
     private PrescriptionService prescriptionService;
-    @Autowired
     private Service service;
-    @Autowired
     private AppointmentService appointmentService;
+
+    public PrescriptionController(PrescriptionService prescriptionService,Service service,AppointmentService appointmentService){
+        this.prescriptionService = prescriptionService;
+        this.service = service;
+        this.appointmentService = appointmentService;
+    }
 
     // 3. Define the `savePrescription` Method:
     // - Handles HTTP POST requests to save a new prescription for a given

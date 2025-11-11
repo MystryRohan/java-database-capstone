@@ -41,10 +41,13 @@ public class DoctorController {
     // (e.g., CRUD operations, authentication).
     // - Inject the shared `Service` class for general-purpose features like token
     // validation and filtering.
-    @Autowired
     private DoctorService doctorService;
-    @Autowired
     private Service service;
+
+    public DoctorController(DoctorService doctorService, Service service){
+        this.doctorService = doctorService;
+        this.service = service;
+    }
 
     // 3. Define the `getDoctorAvailability` Method:
     // - Handles HTTP GET requests to check a specific doctor’s availability on a

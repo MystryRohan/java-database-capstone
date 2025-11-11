@@ -33,10 +33,13 @@ public class PatientController {
     // retrieval, and appointments.
     // - Inject the shared `Service` class for tasks like token validation and login
     // authentication.
-    @Autowired
     private PatientService patientService;
-    @Autowired
     private Service service;
+
+    public PatientController(PatientService patientService, Service service){
+        this.patientService = patientService;
+        this.service = service;
+    }
 
     // 3. Define the `getPatient` Method:
     // - Handles HTTP GET requests to retrieve patient details using a token.

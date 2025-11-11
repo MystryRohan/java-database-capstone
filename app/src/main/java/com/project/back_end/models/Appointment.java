@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointment")
 public class Appointment {
 
   @Id
