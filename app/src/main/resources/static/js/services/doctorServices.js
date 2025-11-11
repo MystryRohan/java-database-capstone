@@ -51,3 +51,70 @@
 
    Catch any other errors, alert the user, and return a default empty result
 */
+import { API_BASE_URL } from "../config/config.js";
+
+const DOCTOR_API = `${API_BASE_URL}/doctor`;
+
+export async function getDoctors() {
+  try {
+    const response = await fetch(DOCTOR_API);
+    const data = await response.json();
+    return data.doctors;
+  } catch (error) {
+    console.log("error fetching doctor", error);
+    return [];
+  }
+}
+
+export async function deleteDoctor(id, token) {
+  try {
+    const response = await fetch(`${DOCTOR_API}/${id}/${token}`, {
+      method: "DELETE",
+    });
+    const res = await response.json();
+    return { sucess: response.ok, message: res.message };
+  } catch (error) {
+    console.log("error deleting doctor", error);
+    return { sucess: false, message: "Server error" };
+  }
+}
+
+export async function saveDoctor(newDoctor, token) {
+  try {
+    const response = await fetch(`${DOCTOR_API}/${token}`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newDoctor),
+    });
+    const res = await response.json();
+    return { success: response.ok, message: res.message };
+  } catch (error) {
+    console.log("failed to save doctor", error);
+    return { success: false, message: res.message };
+  }
+}
+
+export async function filterDoctors(name, time, specialty) {
+  try {
+    const response = await fetch(
+      `${DOCTOR_API}/filter/${name}/${time}/${specialty}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      const res = await response.json();
+      return data;
+    } else {
+      return { doctors: [] };
+    }
+  } catch (error) {
+    console.log("failed to filter doctors", err);
+    return { doctors: [] };
+  }
+}

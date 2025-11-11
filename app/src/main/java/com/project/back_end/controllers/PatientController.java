@@ -3,7 +3,6 @@ package com.project.back_end.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +35,7 @@ public class PatientController {
     private PatientService patientService;
     private Service service;
 
-    public PatientController(PatientService patientService, Service service){
+    public PatientController(PatientService patientService, Service service) {
         this.patientService = patientService;
         this.service = service;
     }
@@ -49,7 +48,7 @@ public class PatientController {
 
     @GetMapping("{token}")
     public ResponseEntity<Map<String, Object>> getPatient(@PathVariable String token) {
-        ResponseEntity<Map<String,String>> result = service.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> result = service.validateToken(token, "patient");
 
         if (result.getBody().isEmpty()) {
             return patientService.getPatientDetails(token);
@@ -65,19 +64,20 @@ public class PatientController {
     // - If validation passes, attempts to create the patient and returns success or
     // error messages based on the outcome.
     @PostMapping("/signup")
-    public ResponseEntity<Map<String,String>> createPatient(@RequestBody Patient patient) {
-        Map<String,String> map = new HashMap<>();
+    public ResponseEntity<Map<String, String>> createPatient(@RequestBody Patient patient) {
+        Map<String, String> map = new HashMap<>();
         if (service.validatePatient(patient)) {
             int res = patientService.createPatient(patient);
-            if(res == 1){
-                map.put("message","Signup successful");
+            if (res == 1) {
+                map.put("message", "Signup successful");
                 return ResponseEntity.status(HttpStatus.OK).body(map);
-            }if(res == 0){
-                map.put("message","Internal Server Error");
+            }
+            if (res == 0) {
+                map.put("message", "Internal Server Error");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
             }
         }
-        map.put("message","Patient already registered");
+        map.put("message", "Patient already registered");
         return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 
@@ -89,7 +89,7 @@ public class PatientController {
     // - Returns a response with a token or an error message depending on login
     // success.
     @PostMapping("/login")
-    public ResponseEntity<Map<String,String>> login(Login login) {
+    public ResponseEntity<Map<String, String>> login(Login login) {
         return service.validatePatientLogin(login);
     }
 
@@ -101,11 +101,12 @@ public class PatientController {
     // - If valid, retrieves the patient's appointment data from `PatientService`;
     // otherwise, returns a validation error.
     @GetMapping("/{patientId}/{token}/{role}")
-    public ResponseEntity<Map<String,Object>> getPatientAppointment(@PathVariable Long patientId, String token, String role) {
-        ResponseEntity<Map<String,String>> res = service.validateToken(token, role);
+    public ResponseEntity<Map<String, Object>> getPatientAppointment(@PathVariable Long patientId, String token,
+            String role) {
+        ResponseEntity<Map<String, String>> res = service.validateToken(token, role);
 
         if (res.getBody().isEmpty()) {
-            return patientService.getPatientAppointment(patientId,token);
+            return patientService.getPatientAppointment(patientId, token);
         }
         Map<String, Object> map = new HashMap<>(res.getBody());
         return new ResponseEntity<>(map, res.getStatusCode());
@@ -120,8 +121,9 @@ public class PatientController {
     // - If valid, delegates filtering logic to the shared service and returns the
     // filtered result.
     @GetMapping("/filter/{condition}/{name}/{token}")
-    public ResponseEntity<Map<String,Object>> filterPatientAppointment(@PathVariable String condition, String name, String token) {
-        ResponseEntity<Map<String,String>> res = service.validateToken(token, "patient");
+    public ResponseEntity<Map<String, Object>> filterPatientAppointment(@PathVariable String condition, String name,
+            String token) {
+        ResponseEntity<Map<String, String>> res = service.validateToken(token, "patient");
         if (res.getBody().isEmpty()) {
 
             return service.filterPatient(condition, name, token);

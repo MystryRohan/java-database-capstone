@@ -92,3 +92,61 @@ Admin Button (`.adminBtn`)
 
 
 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 50px;
+  color: #003e3e;
+}
+.main-content {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  text-align: center;
+  background-image: url(../images/defineRole/index.png);
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+button {
+  background-color: #a62b1f;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  width: 200px;
+  cursor: pointer;
+  font-size: 16px;
+}
+button:hover {
+  background-color: #a62b1f;
+}
+.adminBtn {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+  width: 110px;
+  padding: 10px 0;
+  border: none;
+  cursor: pointer;
+}
+.adminBtn:hover {
+  color: #a62b1f;
+}
