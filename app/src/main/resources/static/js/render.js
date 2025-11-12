@@ -1,17 +1,18 @@
 // render.js
+import {API_BASE_URL} from "./config/config.js"";
 
 function selectRole(role) {
   setRole(role);
   const token = localStorage.getItem('token');
   if (role === "admin") {
     if (token) {
-      window.location.href = `http://localhost:8080/adminDashboard/${token}`;
+      window.location.href = `${API_BASE_URL}/adminDashboard/${token}`;
     }
   } if (role === "patient") {
     window.location.href = "/pages/patientDashboard.html";
   } else if (role === "doctor") {
     if (token) {
-      window.location.href = `http://localhost:8080/doctorDashboard/${token}`;
+      window.location.href = `${API_BASE_URL}/doctorDashboard/${token}`;
     } else if (role === "loggedPatient") {
       window.location.href = "loggedPatientDashboard.html";
     }
