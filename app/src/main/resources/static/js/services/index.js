@@ -1,6 +1,6 @@
 import { openModal } from "../components/modals.js";
 import { API_BASE_URL } from "../config/config.js";
-// import selectRole from "../util";
+import {selectRole} from "../render.js";
 
 /*
   Import the openModal function to handle showing login popups/modals
@@ -94,7 +94,8 @@ window.adminLoginHandler = async function () {
       body: JSON.stringify(admin),
     });
     if (response.ok) {
-      const result = await response.json();
+        const result = await response.json();
+        console.log(result);
       localStorage.setItem("token", result.token);
       selectRole("admin");
     } else {
@@ -102,6 +103,7 @@ window.adminLoginHandler = async function () {
     }
   } catch (error) {
     alert("Something went wrong");
+    console.log(error);
   }
 };
 window.doctorLoginHandler = async function () {

@@ -1,7 +1,7 @@
 // render.js
-import {API_BASE_URL} from "./config/config.js"";
+import {API_BASE_URL} from "./config/config.js";
 
-function selectRole(role) {
+export  function selectRole(role) {
   setRole(role);
   const token = localStorage.getItem('token');
   if (role === "admin") {

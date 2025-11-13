@@ -109,12 +109,12 @@ export async function filterDoctors(name, time, specialty) {
     );
     if (response.ok) {
       const res = await response.json();
-      return data;
+      return res;
     } else {
       return { doctors: [] };
     }
   } catch (error) {
-    console.log("failed to filter doctors", err);
+    console.log("failed to filter doctors", error);
     return { doctors: [] };
   }
 }

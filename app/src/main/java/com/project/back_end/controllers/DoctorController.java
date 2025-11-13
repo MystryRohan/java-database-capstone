@@ -76,7 +76,7 @@ public class DoctorController {
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getDoctor() {
         Map<String, Object> map = new HashMap<>();
-        map.put("doctor", doctorService.getDoctors());
+        map.put("doctors", doctorService.getDoctors());
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
