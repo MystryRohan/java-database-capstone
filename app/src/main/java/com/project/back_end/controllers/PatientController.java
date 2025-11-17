@@ -89,7 +89,7 @@ public class PatientController {
     // - Returns a response with a token or an error message depending on login
     // success.
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(Login login) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Login login) {
         return service.validatePatientLogin(login);
     }
 
@@ -100,9 +100,11 @@ public class PatientController {
     // - Validates the token using the shared service.
     // - If valid, retrieves the patient's appointment data from `PatientService`;
     // otherwise, returns a validation error.
-    @GetMapping("/{patientId}/{token}/{role}")
-    public ResponseEntity<Map<String, Object>> getPatientAppointment(@PathVariable Long patientId, String token,
-            String role) {
+    @GetMapping("/{patientId}/{role}/{token}")
+    public ResponseEntity<Map<String, Object>> getPatientAppointment(@PathVariable Long patientId, @PathVariable  String token,
+            @PathVariable String role) {
+
+        System.out.println(patientId + " " + role +" "+token);
         ResponseEntity<Map<String, String>> res = service.validateToken(token, role);
 
         if (res.getBody().isEmpty()) {
@@ -121,8 +123,8 @@ public class PatientController {
     // - If valid, delegates filtering logic to the shared service and returns the
     // filtered result.
     @GetMapping("/filter/{condition}/{name}/{token}")
-    public ResponseEntity<Map<String, Object>> filterPatientAppointment(@PathVariable String condition, String name,
-            String token) {
+    public ResponseEntity<Map<String, Object>> filterPatientAppointment(@PathVariable String condition, @PathVariable  String name,
+            @PathVariable String token) {
         ResponseEntity<Map<String, String>> res = service.validateToken(token, "patient");
         if (res.getBody().isEmpty()) {
 

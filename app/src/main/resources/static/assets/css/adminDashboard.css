@@ -148,5 +148,6 @@ button:hover {
   cursor: pointer;
 }
 .adminBtn:hover {
-  color: #a62b1f;
+        color: white;
+  background-color: #a62b1f;
 }

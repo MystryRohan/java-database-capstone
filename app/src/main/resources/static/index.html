@@ -116,11 +116,7 @@ and triggers modal-based login functionality.
     <link rel="stylesheet" href="./assets/css/index.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
 
-    <script src="./js/util.js" defer></script>
-    <script src="./js/render.js" defer></script>
-    <script src="./js/components/footer.js" defer></script>
-    <script src="./js/components/header.js" defer></script>
-  </head>
+    </head>
   <body>
     <div class="container">
       <div class="wrapper">
@@ -128,7 +124,7 @@ and triggers modal-based login functionality.
         <main class="main-content">
           <h3>Select Your <span>Role</span></h3>
           <button id="adminLogin" class="adminBtn">Admin</button>
-          <button onclick="selectRole('patient')">Patient</button>
+          <button onclick="bruh()">Patient</button>
           <button id="doctorLogin" class="adminBtn">Doctor</button>
         </main>
         <div id="footer"></div>
@@ -140,6 +136,17 @@ and triggers modal-based login functionality.
         <div id="modal-body"></div>
       </div>
     </div>
+    <script src="./js/util.js" defer></script>
+    <script type="module" src="./js/render.js" defer></script>
+    <script type="module" src="./js/components/footer.js" defer></script>
+    <script type="module" src="./js/components/header.js" defer></script>
+
     <script type="module" src="./js/services/index.js" defer></script>
-  </body>
+    <script>
+        function bruh() {
+            setRole('patient')
+          window.location.href = "/pages/patientDashboard.html";
+        }
+      </script>
+</body>
 </html>

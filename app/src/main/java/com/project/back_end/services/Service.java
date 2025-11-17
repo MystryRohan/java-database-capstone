@@ -124,6 +124,7 @@ public class Service {
 
     public boolean validatePatient(Patient patient) {
         Patient result = patientRepository.findByEmailOrPhone(patient.getEmail(), patient.getPhone());
+        System.out.println(result);
         if (result != null) {
             return false;
         }
@@ -133,7 +134,9 @@ public class Service {
     public ResponseEntity<Map<String, String>> validatePatientLogin(Login login) {
         Map<String, String> map = new HashMap<>();
         try {
+            System.out.println(login.getEmail());
             Patient result = patientRepository.findByEmail(login.getEmail());
+            System.out.println(result);
             if (result != null) {
                 if (result.getPassword().equals(login.getPassword())) {
                     map.put("token", tokenService.generateToken(login.getEmail()));

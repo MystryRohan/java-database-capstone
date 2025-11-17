@@ -4,7 +4,7 @@ import { openModal } from './components/modals.js';
 import { createDoctorCard } from './components/doctorCard.js';
 import { filterDoctors } from './services/doctorServices.js';//call the same function to avoid duplication coz the functionality was same
 import { patientSignup, patientLogin } from './services/patientServices.js';
-
+import { selectRole } from './render.js';
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -113,13 +113,13 @@ window.loginPatient = async function () {
       email,
       password
     }
-    console.log("loginPatient :: ", data)
+    // console.log("loginPatient :: ", data)
     const response = await patientLogin(data);
-    console.log("Status Code:", response.status);
-    console.log("Response OK:", response.ok);
+    // console.log("Status Code:", response.status);
+    // console.log("Response OK:", response.ok);
+    console.log(response);
     if (response.ok) {
       const result = await response.json();
-      console.log(result);
       selectRole('loggedPatient');
       localStorage.setItem('token', result.token)
       window.location.href = '/pages/loggedPatientDashboard.html';

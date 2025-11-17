@@ -6,7 +6,7 @@ const PATIENT_API = API_BASE_URL + '/patient'
 //For creating a patient in db
 export async function patientSignup(data) {
   try {
-    const response = await fetch(`${PATIENT_API}`,
+    const response = await fetch(`${PATIENT_API}/signup`,
       {
         method: "POST",
         headers: {
@@ -16,6 +16,7 @@ export async function patientSignup(data) {
       }
     );
     const result = await response.json();
+    console.log(result);
     if (!response.ok) {
       throw new Error(result.message);
     }
@@ -29,11 +30,11 @@ export async function patientSignup(data) {
 
 //For logging in patient
 export async function patientLogin(data) {
-  console.log("patientLogin :: ", data)
+//   console.log("patientLogin :: ", data)
   return await fetch(`${PATIENT_API}/login`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-type": "application/json"
     },
     body: JSON.stringify(data)
   });
